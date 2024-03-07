@@ -1,8 +1,6 @@
-# py_scripts
 
-This repository contains various smol python projects
 
-## honeySSH
+## Overview
 
 The honeypot system is implemented using Python's paramiko library to create an SSH server. The server listens for incoming connections and simulates a fake UNIX filesystem. When attackers connect to the honeypot, their actions and commands are logged.
 
@@ -35,8 +33,11 @@ server_key = paramiko.RSAKey.from_private_key_file('static_key')
 
 Client unsuccessful login attempts & succesful login on password "qwerty": 
 
-Server logging attempts from attackers:
+![client ss](https://github.com/HelixY2J/py-scripts/blob/main/honeySSH/img/client.png)
 
+Honeypot logging attempts from attackers:
+
+![honeypot](https://github.com/HelixY2J/py-scripts/blob/main/honeySSH/img/server.png)
 
 ## Future Work
 
