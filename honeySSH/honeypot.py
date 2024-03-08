@@ -158,9 +158,7 @@ class sshServer(paramiko.ServerInterface):
          return True
 
 def is_complete_command(command):
-    # Modify this function based on your criteria for a complete command
-    # For example, return True if the command ends with a newline, space followed by another character, etc.
-    # You can also use regular expressions for more complex patterns
+
     return command.endswith("\n") or (" " in command and len(command.split()) > 1)
 
 def handle_connection(client_sock):
@@ -187,52 +185,59 @@ def handle_connection(client_sock):
     buffer = ""  # Initialize a buffer to collect characters
     # channel.send("> Enter 'help' for more info".encode())
     
+    channel.send("$ ".encode())
+
     while True:
         try:
-            channel.send("$ ".encode())  
-            cmd = channel.recv(1).decode("utf-8").strip()  
+            cmd = channel.recv(1).decode("utf-8")
 
             # Append received command to the buffer
             buffer += cmd
+            print(repr(buffer))
+            channel.send(cmd.encode())
 
 
-            if( '\n' in buffer):
-                complete_cmd, buffer = buffer.split('\n',1)
+            if( '\r' in buffer):
+                channel.send("\n".encode())
+                complete_cmd, buffer = buffer.split('\r',1)
             # if not buffer.strip():
             #     break  # Handle empty commands
             
             # Process the complete command only if it's not empty
                 if complete_cmd:
-                    normalized_cmd = complete_cmd.lower().replace("\t", "")
+                    normalized_cmd = complete_cmd.replace("\t", "")
 
                     if normalized_cmd.lower() in ("exit", "quit", "logout"):
                         channel.send("Goodbye!\n".encode())
                         channel.close()
                         break
                     elif normalized_cmd == "a":
-                        response = "hiiii\n"
+                        response = "hiiii\n\r"
                         channel.send(response.encode())
 
                     elif normalized_cmd == "ls":
-                        response = "\n".join(
-                            file_system["/"]["home"]["userIV"]["dir"]
-                            + [""]
-                            + file_system["/"]["home"]["userIV"]["files"]
-                        )
+                        # response = "\n".join(
+                        #     file_system["/"]["home"]["userIV"]["dir"]
+                        #     + [""]
+                        #     + file_system["/"]["home"]["userIV"]["files"]
+                        # )
+                        response = " ".join(list(file_system["/"]["home"]["userIV"]["dir"].keys())) + "\n\r"
                         channel.send(response.encode())
                         # response = "\n".join(file_system["/"]["bin"]["files"])
                         # channel.send(response.encode())
 
                     elif normalized_cmd.startswith("cd "):
-                        target_dir = cmd[3:]
+                        target_dir = normalized_cmd[3:].strip()
                         if target_dir in file_system["/"]["home"]["userIV"]["dir"]:
-                            channel.send(f"Directory changed to {target_dir}\n".encode())
+                            channel.send(f"Directory changed to {target_dir}\n\r".encode())
                         else:
-                            channel.send("No such directory\n".encode())
+                            channel.send("No such directory\n\r".encode())
 
                     else:
-                        channel.send(f"Unknown command: {cmd}\n".encode())  # Handle invalid commands
+                        channel.send(f"Unknown command: {cmd}\n\r".encode())  # Handle invalid commands
                     buffer = ""
+                
+                channel.send("$ ".encode())
 
 
         except Exception as e:
