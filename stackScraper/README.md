@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 ### Troubleshooting 
 
-If you get an error message indicating that there is an issue with SSL certificate verification due to python requests library being unable to verify the SSL certificate of the website. 
+You might get an error message indicating that there is an issue with SSL certificate verification due to python requests library being unable to verify the SSL certificate of the website. 
 
 I just ignored SSL certificate verification but that is not recommeded though for security reasons 
 ```python
