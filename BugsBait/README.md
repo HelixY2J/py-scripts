@@ -33,11 +33,11 @@ server_key = paramiko.RSAKey.from_private_key_file('static_key')
 
 Client unsuccessful login attempts & succesful login on password "qwerty": 
 
-![client ss](https://github.com/HelixY2J/py-scripts/blob/main/honeySSH/img/client.png)
+![client ss](https://github.com/HelixY2J/py-scripts/blob/main/BugsBait/img/client.png)
 
 Honeypot logging attempts from attackers:
 
-![honeypot](https://github.com/HelixY2J/py-scripts/blob/main/honeySSH/img/server.png)
+![honeypot](https://github.com/HelixY2J/py-scripts/blob/main/BugsBait/img/server.png)
 
 ## Future Work
 
